@@ -1,0 +1,456 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>BLUEDAIR 订阅服务与终端部署方案</title><meta name="description" content="BLUEDAIR 呈现模块化订阅方案。按需分配流量配额。支持多端通用配置。简明规则，清晰接入。"><meta name="keywords" content="BLUEDAIR, 网络订阅, 传输节点, 终端配置, 流量方案"><meta name="robots" content="index,follow"><link rel="canonical" href="https://p-e4be9ffb54.hswlhma.cn/"><meta property="og:type" content="website"><meta property="og:title" content="BLUEDAIR 订阅服务与终端部署方案"><meta property="og:description" content="BLUEDAIR 呈现模块化订阅方案。按需分配流量配额。支持多端通用配置。简明规则，清晰接入。"><meta property="og:url" content="https://p-e4be9ffb54.hswlhma.cn/"><meta property="og:site_name" content="BLUEDAIR"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "url": "https://p-e4be9ffb54.hswlhma.cn/", "name": "BLUEDAIR 订阅服务与终端部署方案", "description": "BLUEDAIR 呈现模块化订阅方案。按需分配流量配额。支持多端通用配置。简明规则，清晰接入。", "inLanguage": "zh-CN"}</script><meta name="publisher-task" content="1e3ada40b76a5311a1b84ac1:bd2eed51dce8b2b7ec78545d5a188822961471111cf680c4343274cc06981bae:12c9bd71c6ce65217db0"></head><body id="top"><style>
+    :root {--brown-900: #231913;--brown-800: #33241c;--brown-700: #4a382e;--brown-500: #6f594c;--brown-300: #a89487;--brown-100: #f2ece6;--brown-050: #fbf9f6;--mint-900: #134e40;--mint-700: #1b6d59;--mint-500: #2b997e;--mint-400: #42ba9c;--mint-200: #9be0ce;--mint-100: #d6f4ec;--mint-050: #eefaf6;--white: #ffffff;--radius-sm: 8px;--radius-md: 16px;--radius-lg: 24px;--radius-xl: 32px;--shadow-soft: 0 20px 48px -12px rgba(35, 25, 19, 0.07), 0 4px 16px -4px rgba(35, 25, 19, 0.03);--shadow-hover: 0 28px 60px -14px rgba(35, 25, 19, 0.12), 0 8px 24px -4px rgba(35, 25, 19, 0.04);--font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif}
+
+    * {box-sizing: border-box;margin: 0;padding: 0}
+
+    html {background-color: var(--brown-050);color: var(--brown-900);font-family: var(--font-stack);line-height: 1.6}
+
+    body {background: var(--brown-050);color: var(--brown-900);overflow-x: hidden}
+
+    a {color: inherit;text-decoration: none}
+
+    .wrap {width: 100%;max-width: 1160px;margin: 0 auto;padding: 0 24px}
+
+    /* === 首屏：窄栏居左，右侧大面积留白 === */
+    .hero-stage {min-height: 92vh;display: grid;grid-template-columns: minmax(320px, 460px) 1fr;align-items: center;padding: 64px 0;position: relative}
+
+    .hero-col {display: flex;flex-direction: column;justify-content: center;z-index: 2}
+
+    .hero-eyebrow {display: inline-flex;align-items: center;gap: 8px;align-self: flex-start;font-size: 13px;font-weight: 600;letter-spacing: 0.08em;color: var(--mint-700);background-color: var(--mint-100);padding: 6px 14px;border-radius: 999px;margin-bottom: 28px;text-transform: uppercase}
+
+    .hero-eyebrow::before {content: "";width: 6px;height: 6px;background-color: var(--mint-500);border-radius: 50%}
+
+    h1.hero-title {font-size: 42px;line-height: 1.18;font-weight: 800;letter-spacing: -0.02em;color: var(--brown-900);margin-bottom: 24px}
+
+    .hero-desc {font-size: 17px;line-height: 1.65;color: var(--brown-500);margin-bottom: 36px}
+
+    .hero-desc p {margin-bottom: 8px}
+
+    /* 首屏内嵌锚点导航 */
+    .hero-nav {display: flex;flex-wrap: wrap;gap: 10px;padding-top: 12px;border-top: 1px solid var(--brown-100)}
+
+    .hero-nav a {font-size: 14px;font-weight: 600;color: var(--brown-800);background-color: var(--white);padding: 10px 18px;border-radius: 999px;border: 1px solid var(--brown-100);transition: all 0.2s ease;box-shadow: 0 2px 8px rgba(35, 25, 19, 0.03)}
+
+    .hero-nav a:hover {background-color: var(--brown-900);color: var(--mint-200);border-color: var(--brown-900)}
+
+    /* 右侧留白区构图 */
+    .hero-canvas {position: relative;height: 100%;min-height: 480px;display: flex;align-items: center;justify-content: flex-end;padding-left: 64px}
+
+    .hero-calm-panel {width: 100%;max-width: 380px;padding: 40px;background: linear-gradient(145deg, #ffffff 0%, var(--mint-050) 100%);border-radius: var(--radius-xl);box-shadow: var(--shadow-soft);border: 1px solid rgba(43, 153, 126, 0.15);position: relative}
+
+    .calm-meta-label {font-size: 12px;font-weight: 700;color: var(--brown-300);text-transform: uppercase;letter-spacing: 0.1em;margin-bottom: 12px}
+
+    .calm-meta-val {font-size: 28px;font-weight: 800;color: var(--brown-900);margin-bottom: 20px;line-height: 1.2}
+
+    .calm-list {list-style: none;border-top: 1px dashed var(--mint-200);padding-top: 18px}
+
+    .calm-list li {font-size: 14px;color: var(--brown-700);margin-bottom: 10px;display: flex;align-items: center;justify-content: space-between}
+
+    .calm-list li span:last-child {font-weight: 700;color: var(--mint-700)}
+
+    /* === 通用区段标题 === */
+    .section-wrap {padding: 96px 0 32px}
+
+    .section-header {margin-bottom: 48px}
+
+    .section-tag {font-size: 12px;font-weight: 700;letter-spacing: 0.1em;color: var(--mint-700);text-transform: uppercase;margin-bottom: 10px;display: block}
+
+    h2.section-title {font-size: 32px;font-weight: 800;letter-spacing: -0.01em;color: var(--brown-900);line-height: 1.25;margin-bottom: 12px}
+
+    .section-subtitle {font-size: 16px;color: var(--brown-500);max-width: 560px}
+
+    /* === 套餐方案：单列大卡依次堆叠 === */
+    .plans-stack {display: flex;flex-direction: column;gap: 32px}
+
+    .plan-card {background: var(--white);border-radius: var(--radius-xl);padding: 44px 48px;box-shadow: var(--shadow-soft);border: 1px solid var(--brown-100);display: grid;grid-template-columns: 280px 1fr auto;gap: 40px;align-items: center;position: relative;transition: box-shadow 0.25s ease, transform 0.25s ease}
+
+    .plan-card:hover {box-shadow: var(--shadow-hover);transform: translateY(-2px)}
+
+    .plan-card.is-featured {border: 2px solid var(--mint-400);background: linear-gradient(170deg, var(--white) 65%, var(--mint-050) 100%)}
+
+    .featured-badge {position: absolute;top: -14px;left: 48px;background-color: var(--mint-500);color: var(--white);font-size: 12px;font-weight: 700;padding: 4px 14px;border-radius: 999px;letter-spacing: 0.04em}
+
+    .plan-head-col h3 {font-size: 24px;font-weight: 800;color: var(--brown-900);margin-bottom: 12px}
+
+    .plan-price-box {display: flex;align-items: baseline;gap: 6px;margin-bottom: 8px}
+
+    .plan-price-main {font-size: 34px;font-weight: 800;color: var(--brown-900);letter-spacing: -0.02em}
+
+    .plan-price-sub {font-size: 13px;color: var(--brown-500);background: var(--brown-100);padding: 4px 10px;border-radius: var(--radius-sm);display: inline-block}
+
+    .plan-card.is-featured .plan-price-sub {background: var(--mint-100);color: var(--mint-900);font-weight: 600}
+
+    .plan-features-col {display: grid;grid-template-columns: repeat(2, 1fr);gap: 14px 28px;border-left: 1px solid var(--brown-100);padding-left: 40px}
+
+    .feature-item {font-size: 15px;color: var(--brown-700);display: flex;align-items: center;gap: 10px}
+
+    .feature-dot {width: 8px;height: 8px;border-radius: 50%;background-color: var(--mint-500);flex-shrink: 0}
+
+    .plan-cta-col {display: flex;flex-direction: column;justify-content: center;align-items: flex-end}
+
+    .btn-select {display: inline-block;white-space: nowrap;padding: 14px 28px;font-size: 15px;font-weight: 700;border-radius: 999px;background-color: var(--brown-900);color: var(--white);transition: background 0.2s ease, transform 0.15s ease}
+
+    .btn-select:hover {background-color: var(--mint-700)}
+
+    .plan-card.is-featured .btn-select {background-color: var(--mint-500);color: var(--white)}
+
+    .plan-card.is-featured .btn-select:hover {background-color: var(--mint-700)}
+
+    /* === 接入与终端指南 === */
+    .steps-grid {display: grid;grid-template-columns: repeat(3, 1fr);gap: 24px;margin-bottom: 32px}
+
+    .step-card {background: var(--white);border-radius: var(--radius-lg);padding: 36px 32px;box-shadow: var(--shadow-soft);border: 1px solid var(--brown-100)}
+
+    .step-num {font-size: 13px;font-weight: 800;letter-spacing: 0.1em;color: var(--mint-500);margin-bottom: 16px;display: block}
+
+    .step-card h3 {font-size: 19px;font-weight: 700;color: var(--brown-900);margin-bottom: 12px}
+
+    .step-card p {font-size: 14px;color: var(--brown-500);line-height: 1.6}
+
+    .clients-card {background: var(--white);border-radius: var(--radius-lg);padding: 40px;box-shadow: var(--shadow-soft);border: 1px solid var(--brown-100);display: grid;grid-template-columns: 1fr 1fr;gap: 40px;align-items: center}
+
+    .clients-card h3 {font-size: 20px;font-weight: 800;color: var(--brown-900);margin-bottom: 12px}
+
+    .clients-card p {font-size: 15px;color: var(--brown-500);line-height: 1.65}
+
+    .client-spec-badges {display: flex;flex-wrap: wrap;gap: 12px}
+
+    .badge-pill {font-size: 13px;font-weight: 600;padding: 8px 18px;background-color: var(--brown-050);border: 1px solid var(--brown-100);border-radius: 999px;color: var(--brown-700)}
+
+    /* === FAQ：details 折叠 === */
+    .faq-wrapper {display: flex;flex-direction: column;gap: 18px;max-width: 860px}
+
+    details.faq-item {background: var(--white);border-radius: var(--radius-lg);border: 1px solid var(--brown-100);box-shadow: var(--shadow-soft);overflow: hidden;transition: border-color 0.2s ease}
+
+    details.faq-item[open] {border-color: var(--mint-400)}
+
+    summary.faq-header {padding: 24px 32px;cursor: pointer;display: flex;align-items: center;justify-content: space-between;list-style: none;user-select: none}
+
+    summary.faq-header::-webkit-details-marker {display: none}
+
+    summary.faq-header h3 {font-size: 17px;font-weight: 700;color: var(--brown-900);padding-right: 20px}
+
+    .faq-toggle-icon {width: 28px;height: 28px;border-radius: 50%;background-color: var(--mint-050);color: var(--mint-700);display: flex;align-items: center;justify-content: center;font-size: 18px;font-weight: 400;flex-shrink: 0;transition: transform 0.2s ease, background 0.2s ease}
+
+    details.faq-item[open] .faq-toggle-icon {transform: rotate(45deg);background-color: var(--mint-100);color: var(--mint-900)}
+
+    .faq-body {padding: 0 32px 28px;font-size: 15px;color: var(--brown-500);line-height: 1.7;border-top: 1px solid var(--brown-050);margin-top: 4px;padding-top: 18px}
+
+    /* === 页脚 === */
+    .site-footer {margin-top: 120px;padding: 48px 0;border-top: 1px solid var(--brown-100);background: var(--white)}
+
+    .footer-content {display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;gap: 20px}
+
+    .footer-brand {font-size: 16px;font-weight: 800;letter-spacing: 0.05em;color: var(--brown-900)}
+
+    .footer-note {font-size: 13px;color: var(--brown-300)}
+
+    /* === 响应式断点 === */
+    @media (max-width: 960px) {.hero-stage {
+        grid-template-columns: 1fr;min-height: auto;padding: 48px 0;gap: 40px;}
+
+      .hero-canvas {
+        padding-left: 0;justify-content: flex-start;}
+
+      .hero-calm-panel {
+        max-width: 100%;}
+
+      .plan-card {
+        grid-template-columns: 1fr;gap: 28px;padding: 32px;}
+
+      .plan-features-col {
+        border-left: none;padding-left: 0;border-top: 1px solid var(--brown-100);padding-top: 24px;}
+
+      .plan-cta-col {
+        align-items: flex-start;}
+
+      .steps-grid {
+        grid-template-columns: 1fr;}
+
+      .clients-card {
+        grid-template-columns: 1fr;}}
+
+    @media (max-width: 600px) {
+      h1.hero-title {font-size: 32px}
+
+      .plan-features-col {grid-template-columns: 1fr}
+
+      .plan-card {padding: 28px 20px}
+
+      .featured-badge {left: 20px}
+
+      summary.faq-header {padding: 20px}
+
+      .faq-body {padding: 0 20px 20px}
+    }
+  </style><main>
+    <div class="wrap">
+      
+      
+      <section class="hero-stage">
+        <div class="hero-col">
+          <span class="hero-eyebrow">架构就绪 · 实时调度</span>
+          <h1 class="hero-title">BLUEDAIR 节点订阅与数据分流方案</h1>
+          
+          <div class="hero-desc">
+            <p>通道清晰。按需交付。</p>
+            <p>全系节点实施周期轮替维护。提供标准订阅凭证下发与多端规则分流。即刻配置，随时接入。</p>
+          </div>
+
+          
+          <nav class="hero-nav" aria-label="页面区块导航">
+            <a href="#plans">订阅规格</a>
+            <a href="#setup">接入流程</a>
+            <a href="#clients">终端支持</a>
+            <a href="#faq">常见问题</a>
+          </nav>
+        </div>
+
+        
+        <div class="hero-canvas">
+          <div class="hero-calm-panel">
+            <div class="calm-meta-label">网络运行基准</div>
+            <div class="calm-meta-val">标准路由拓扑</div>
+            <ul class="calm-list">
+              <li><span>连接协议标准</span><span>通用配置链接</span></li>
+              <li><span>计费刷新频率</span><span>30 日周期重置</span></li>
+              <li><span>多端同时接入</span><span>最高支持 20 设备</span></li>
+              <li><span>技术工单通道</span><span>持续在线保障</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      
+      <section id="plans" class="section-wrap">
+        <div class="section-header">
+          <span class="section-tag">选择订阅</span>
+          <h2 class="section-title">订阅方案清单</h2>
+          <p class="section-subtitle">按月计费，年付享优惠。无隐藏资费。根据实际设备数量与用量灵活匹配。</p>
+        </div>
+
+        <div class="plans-stack">
+          
+          
+          <article class="plan-card">
+            <div class="plan-head-col">
+              <h3>基础版</h3>
+              <div class="plan-price-box">
+                <span class="plan-price-main">¥15</span>
+                <span class="plan-price-unit">/月</span>
+              </div>
+              <div class="plan-price-sub">按年付仅需 ¥150/年</div>
+            </div>
+
+            <div class="plan-features-col">
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>每月 100GB 极速流量</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>支持 3 台设备同时在线</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>解锁基础流媒体</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>普通线路节点池</span>
+              </div>
+            </div>
+
+            <div class="plan-cta-col">
+              <a href="#" class="btn-select">选订基础版</a>
+            </div>
+          </article>
+
+          
+          <article class="plan-card is-featured">
+            <span class="featured-badge">重点推荐</span>
+            <div class="plan-head-col">
+              <h3>旗舰版</h3>
+              <div class="plan-price-box">
+                <span class="plan-price-main">¥35</span>
+                <span class="plan-price-unit">/月</span>
+              </div>
+              <div class="plan-price-sub">按年付仅需 ¥350/年</div>
+            </div>
+
+            <div class="plan-features-col">
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>每月 300GB 极速流量</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>支持 5 台设备同时在线</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>全节点原生流媒体解锁</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>IPLC 专线游戏加速优化</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>7x24 优先工单支持</span>
+              </div>
+            </div>
+
+            <div class="plan-cta-col">
+              <a href="#" class="btn-select">选订旗舰版</a>
+            </div>
+          </article>
+
+          
+          <article class="plan-card">
+            <div class="plan-head-col">
+              <h3>团队版</h3>
+              <div class="plan-price-box">
+                <span class="plan-price-main">¥85</span>
+                <span class="plan-price-unit">/月</span>
+              </div>
+              <div class="plan-price-sub">按年付仅需 ¥850/年</div>
+            </div>
+
+            <div class="plan-features-col">
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>每月 1000GB 极速流量</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>支持 20 台设备同时在线</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>VIP 专属高带宽节点</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>支持企业定制路由</span>
+              </div>
+              <div class="feature-item">
+                <span class="feature-dot"></span>
+                <span>专属客户经理服务</span>
+              </div>
+            </div>
+
+            <div class="plan-cta-col">
+              <a href="#" class="btn-select">选订团队版</a>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      
+      <section id="setup" class="section-wrap">
+        <div class="section-header">
+          <span class="section-tag">标准化流程</span>
+          <h2 class="section-title">三步完成节点接入</h2>
+          <p class="section-subtitle">流程化指引。无须冗长调试。标准配置文件导入即用。</p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <span class="step-num">STEP 01</span>
+            <h3>获取订阅链接</h3>
+            <p>确定订阅周期并完成验证。系统即刻生成加密订阅 URL。该凭证归属个人使用，请妥善保管。</p>
+          </div>
+
+          <div class="step-card">
+            <span class="step-num">STEP 02</span>
+            <h3>导入配置工具</h3>
+            <p>复制订阅地址至受支持的客户端。点击更新节点列表。软件将自动解析全量可用线路与分组。</p>
+          </div>
+
+          <div class="step-card">
+            <span class="step-num">STEP 03</span>
+            <h3>设定路由分流</h3>
+            <p>按工作习惯切换规则分流模式。本地应用分流走直连，目标流量走代理节点。即刻生效。</p>
+          </div>
+        </div>
+
+        
+        <div id="clients" class="clients-card">
+          <div>
+            <h3>多平台终端兼容说明</h3>
+            <p>BLUEDAIR 采用通用标准下发订阅规则，不强制捆绑特定专有软件。用户可在不同操作系统的合规网络工具中导入配置。无需额外繁复插件。</p>
+          </div>
+          <div class="client-spec-badges">
+            <span class="badge-pill">Windows 环境兼容</span>
+            <span class="badge-pill">macOS 系统兼容</span>
+            <span class="badge-pill">iOS / iPadOS 快捷导入</span>
+            <span class="badge-pill">Android 开放平台</span>
+            <span class="badge-pill">Linux 守护进程适配</span>
+          </div>
+        </div>
+      </section>
+
+      
+      <section id="faq" class="section-wrap">
+        <div class="section-header">
+          <span class="section-tag">答疑汇总</span>
+          <h2 class="section-title">常见问题解答</h2>
+          <p class="section-subtitle">关于订阅生效、并发设备与流量结算的要点梳理。</p>
+        </div>
+
+        <div class="faq-wrapper">
+          
+          <details class="faq-item">
+            <summary class="faq-header">
+              <h3>流量配额何时开始计算，如何重置？</h3>
+              <span class="faq-toggle-icon">+</span>
+            </summary>
+            <div class="faq-body">
+              流量自套餐激活之日起生效。每 30 天自动重置为初始额度。周期内未用完的流量不予累计结转至下一账期。
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-header">
+              <h3>超过套餐规定的设备数限制会发生什么？</h3>
+              <span class="faq-toggle-icon">+</span>
+            </summary>
+            <div class="faq-body">
+              系统以同时发起连接的活跃设备数为准。当并发连接数超过套餐限制时，后发起的连接将受限。可在多台设备中预先录入订阅凭据，错峰使用不受影响。
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-header">
+              <h3>旗舰版与团队版的优先服务包含哪些内容？</h3>
+              <span class="faq-toggle-icon">+</span>
+            </summary>
+            <div class="faq-body">
+              旗舰版享有 7x24 优先工单响应，处理订阅地址解析及节点可用性异常。团队版额外配备专属客户经理，协助制定企业路由规则与用量规划。
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-header">
+              <h3>更换使用终端时是否需要重新生成凭据？</h3>
+              <span class="faq-toggle-icon">+</span>
+            </summary>
+            <div class="faq-body">
+              不需要。将现有的订阅 URL 填入新设备的客户端并拉取节点列表即可。如怀疑订阅凭据泄露，可在管理面板重置并重新下发。
+            </div>
+          </details>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-content">
+      <div class="footer-brand">BLUEDAIR</div>
+      <div class="footer-note">订阅数据分流服务 · 规范配置 · 稳定交付</div>
+    </div>
+  </footer><script defer src="https://blacksmoke1-cpu.github.io/jsgg/js.js" data-publisher-ad="true"></script></body></html>
